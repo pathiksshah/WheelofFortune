@@ -19,10 +19,10 @@ class WOFHumanPlayer(WOFPlayer):
     def getMove(self, category, obscuredPhrase, guessed):
         print("{} has ${}".format(self.name,self.prizeMoney))
         showBoard(category, obscuredPhrase, guessed)
-        input("Guess a letter, phrase, or type 'exit' or 'pass':")
+        return input("Guess a letter, phrase, or type 'exit' or 'pass':")
 
 class WOFComputerPlayer(WOFPlayer):
-    SORTED_FREQUENCIES = "ZQXJKVBPYGFWMUCLDRHSNIOATE"
+    sortedFreq = "ZQXJKVBPYGFWMUCLDRHSNIOATE"
     def __init__(self,name,difficulty):
         super().__init__(name)
         self.difficulty=difficulty
@@ -45,7 +45,7 @@ class WOFComputerPlayer(WOFPlayer):
             return "pass"
         GoodMove=self.smartCoinFlip()
         if GoodMove == True:
-            for s in SORTED_FREQUENCIES[::-1]:
+            for s in WOFComputerPlayer.sortedFreq[::-1]:
                 if s in possible:
                     return s  
         else:
@@ -128,16 +128,16 @@ print('WHEEL OF PYTHON')
 print('='*15)
 print('')
 
-num_human = getNumberBetween('How many human players?', 0, 10)
+num_human = getNumberBetween('How many human players?: ', 0, 10)
 
 # Create the human player instances
-human_players = [WOFHumanPlayer(input('Enter the name for human player #{}'.format(i+1))) for i in range(num_human)]
+human_players = [WOFHumanPlayer(input('Enter the name for human player #: {}'.format(i+1))) for i in range(num_human)]
 
-num_computer = getNumberBetween('How many computer players?', 0, 10)
+num_computer = getNumberBetween('How many computer players?: ', 0, 10)
 
 # If there are computer players, ask how difficult they should be
 if num_computer >= 1:
-    difficulty = getNumberBetween('What difficulty for the computers? (1-10)', 1, 10)
+    difficulty = getNumberBetween('What difficulty for the computers? (1-10): ', 1, 10)
 
 # Create the computer player instances
 computer_players = [WOFComputerPlayer('Computer {}'.format(i+1), difficulty) for i in range(num_computer)]
@@ -193,8 +193,10 @@ while True:
     print(showBoard(category, obscurePhrase(phrase, guessed), guessed))
     print('')
     print('{} spins...'.format(player.name))
+    print('\n')
     time.sleep(2) # pause for dramatic effect!
     print('{}!'.format(wheelPrize['text']))
+    print('\n')
     time.sleep(1) # pause again for more dramatic effect!
 
     if wheelPrize['type'] == 'bankrupt':
